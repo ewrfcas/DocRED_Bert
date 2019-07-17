@@ -25,11 +25,11 @@ A bert baseline for DocRED (https://github.com/thunlp/DocRED)
 
 4. python train_cls.py
 
-### result in 10 epoch
+### Result in 10 epoch
 
-#### threshold=0.5 in sigmoid
+#### Threshold=0.5 in sigmoid
 
-all: Precision:46.336, Recall:78.334, F1-score:58.228
+All: Precision:46.336, Recall:78.334, F1-score:58.228
 
-ignore: Precision:42.544, Recall:76.520, F1-score:54.684
+Ignore: Precision:42.544, Recall:76.520, F1-score:54.684
 
