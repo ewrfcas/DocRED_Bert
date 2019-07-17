@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 import copy
 
-os.environ["CUDA_VISIBLE_DEVICES"] = '0,1,2,3'
+os.environ["CUDA_VISIBLE_DEVICES"] = '0'
 
 
 def parse_args():
@@ -73,24 +73,28 @@ def data_gen(data):
 def get_result(y_pred, y_true,
                acc_num, precision_num, recall_num,
                acc_num_ign, precision_num_ign, recall_num_ign, th=0.5):
-    intrain = y_true['intrain']
-    y_true = y_true['labels']
-    y_pred = y_pred[1:]
-    y_true = y_true[1:]
-    y_pred[y_pred > th] = 1
-    y_pred[y_pred < th] = 0
+    y_true_tmp = copy.deepcopy(y_true)
+    y_pred_tmp = copy.deepcopy(y_pred)
 
-    y_add = y_pred + y_true
+    intrain = y_true_tmp['intrain']
+    y_true_tmp = y_true_tmp['labels']
+
+    y_pred_tmp = y_pred_tmp[1:]
+    y_true_tmp = y_true_tmp[1:]
+    y_pred_tmp[y_pred_tmp > th] = 1
+    y_pred_tmp[y_pred_tmp < th] = 0
+
+    y_add = y_pred_tmp + y_true_tmp
     y_add[y_add != 2] = 0
     y_add[y_add == 2] = 1
 
-    recall_num += np.sum(y_true)
-    precision_num += np.sum(y_pred)
+    recall_num += np.sum(y_true_tmp)
+    precision_num += np.sum(y_pred_tmp)
     acc_num += np.sum(y_add)
 
     if not intrain:
-        recall_num_ign += np.sum(y_true)
-        precision_num_ign += np.sum(y_pred)
+        recall_num_ign += np.sum(y_true_tmp)
+        precision_num_ign += np.sum(y_pred_tmp)
         acc_num_ign += np.sum(y_add)
 
     return acc_num, precision_num, recall_num, acc_num_ign, precision_num_ign, recall_num_ign
@@ -118,17 +122,15 @@ def evaluate(model, dev_features, device, ths=[0.5]):
             pbar.update(1)
 
     for th in ths:
-        all_preds_tmp = copy.deepcopy(all_preds)
-        dev_features_tmp = copy.deepcopy(dev_features)
         acc_num = acc_num_ign = 0
         precision_num = precision_num_ign = 0
         recall_num = recall_num_ign = 0
         print('threshold:', th)
         eval_index = 0
-        for i in tqdm(range(len(all_preds_tmp))):
-            for ii in range(all_preds_tmp[i].shape[0]):
+        for i in tqdm(range(len(all_preds))):
+            for ii in range(all_preds[i].shape[0]):
                 acc_num, precision_num, recall_num, \
-                acc_num_ign, precision_num_ign, recall_num_ign = get_result(all_preds_tmp[i][ii], dev_features_tmp[eval_index],
+                acc_num_ign, precision_num_ign, recall_num_ign = get_result(all_preds[i][ii], dev_features[eval_index],
                                                                             acc_num, precision_num, recall_num,
                                                                             acc_num_ign, precision_num_ign,
                                                                             recall_num_ign, th=th)

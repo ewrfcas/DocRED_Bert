@@ -33,3 +33,9 @@ All: Precision:46.336, Recall:78.334, F1-score:58.228
 
 Ignore: Precision:42.544, Recall:76.520, F1-score:54.684
 
+#### Threshold=0.9 in sigmoid
+
+All: Precision:56.772, Recall:70.718, F1-score:62.981
+
+Ignore: Precision:52.836, Recall:68.814, F1-score:59.776
+
