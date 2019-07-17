@@ -11,17 +11,17 @@ A bert baseline for DocRED (https://github.com/thunlp/DocRED)
 ### Run
 1. Download dataset (https://github.com/thunlp/DocRED/tree/master/data)
 
-> include rel2id.json
+> Include rel2id.json
 
 2. Download and convert model weights
 
-> weights in https://github.com/google-research/bert, model and convert in https://github.com/huggingface/pytorch-transformers, 
+> Weights in https://github.com/google-research/bert, model and convert in https://github.com/huggingface/pytorch-transformers, 
 
 3. python preprocess.py
 
 > Please use 'convert_feature'.
 
-> 'convert_feature_multioutput' is used to build datasets as the offical baseline, but it seems that this strategy works badly in bert.
+> Function 'convert_feature_multioutput' is used to build datasets as the offical baseline, but it seems that this strategy works badly in bert.
 
 4. python train_cls.py
 
